@@ -122,6 +122,55 @@ class Result implements JsonSerializable
     }
 
     /**
+     * @return int
+     */
+    public function getResult(): int
+    {
+        return $this->result;
+    }
+
+    /**
+     * @param int $result
+     */
+    public function setResult(int $result): void
+    {
+        $this->result = $result;
+    }
+
+    /**
+     * @return User|null
+     */
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param User|null $user
+     */
+    public function setUser(?User $user): void
+    {
+        $this->user = $user;
+    }
+
+    /**
+     * @return DateTime|null
+     */
+    public function getTime(): ?DateTime
+    {
+        return $this->time;
+    }
+
+    /**
+     * @param DateTime|null $time
+     */
+    public function setTime(?DateTime $time): void
+    {
+        $this->time = $time;
+    }
+
+
+    /**
      * Specify data which should be serialized to JSON
      *
      * @link   http://php.net/manual/en/jsonserializable.jsonserialize.php
