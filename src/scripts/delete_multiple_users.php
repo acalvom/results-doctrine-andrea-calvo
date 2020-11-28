@@ -16,7 +16,7 @@ require __DIR__ . '/../../vendor/autoload.php';
 Utils::loadEnv(__DIR__ . '/../../');
 $entityManager = Utils::getEntityManager();
 
-if ($argc < 2) {
+if ($argc < 3) {
     $fich = basename(__FILE__);
     echo <<< MARCA_FIN
 
