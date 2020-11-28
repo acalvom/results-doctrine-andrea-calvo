@@ -17,12 +17,48 @@ function funcionHomePage()
     global $routes;
 
     $rutaUserList = $routes->get('ruta_user_list')->getPath();
+    $rutaUser = $routes->get('ruta_user')->getPath();
     $rutaResultList = $routes->get('ruta_result_list')->getPath();
+    $rutaResult = $routes->get('ruta_result')->getPath();
+
     echo <<< ____MARCA_FIN
-    <ul>
-        <li><a href="$rutaUserList">User List</a></li>
-        <li><a href="$rutaResultList">Result List</a></li>
-    </ul>
+   <!DOCTYPE html>
+    <html lang="es">
+        <head>
+          <title>Results Doctrine</title>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+          <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        </head>
+        <body>
+          <div class="container">
+            <div class="row">
+              <div class="col" >
+                <a href="$rutaUserList">User List</a></br>
+                <form action="$rutaUser" method="GET" enctype="multipart/form-data">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" size="10"/>
+                    <input type="submit" value="Send Username"/>
+                </form>
+              </div>
+              <div class="col" >
+                <a href="$rutaResultList">Result List</a></br>
+                <form action="$rutaResult" method="GET" enctype="multipart/form-data">
+                    <label for="id">Id:</label>
+                    <input type="text" id="id" name="id" size="10"/>
+                    <input type="submit" value="Send Id"/>
+                </form>
+                <a href="$rutaResult">Result</a></br>
+              </div>
+            </div>
+          </div>
+        </body>
+    </html>
+   
+    
+    
+    
 ____MARCA_FIN;
 }
 
@@ -52,12 +88,11 @@ function funcionListadoUsuarios(): void
         PHP_EOL;
         $items++;
     }
-
-
 }
 
-function funcionUsuario(string $name)
+function funcionUsuario()
 {
+    $name = $_GET['username'];
     $entityManager = Utils::getEntityManager();
     /** @var User $user */
     $user = $entityManager
@@ -101,6 +136,26 @@ function funcionListadoResultados(): void
         $items++;
     }
     echo PHP_EOL . "Total: $items results.";
+}
 
+
+function funcionResultado()
+{
+    $id = $_GET['id'];
+
+    $entityManager = Utils::getEntityManager();
+
+    /** @var Result $result */
+    $result = $entityManager
+        ->getRepository(Result::class)
+        ->findOneBy(['id' => $id]);
+    if (null === $result) {
+        echo "Result $id not found" . PHP_EOL;
+        exit(0);
+    }
+
+    echo json_encode($result, JSON_PRETTY_PRINT);
+
+    //echo "Result ". $result->__toString() . PHP_EOL;
 
 }

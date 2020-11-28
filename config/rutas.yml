@@ -25,3 +25,12 @@ ruta_result_list:
     controller: 'funcionListadoResultados'
     methods:
         - GET
+
+ruta_result:
+    path: /results/{id}
+    controller: 'funcionResultado'
+    defaults:
+        name: _default_
+    methods:
+        - GET
+        - DELETE
