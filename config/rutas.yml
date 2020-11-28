@@ -19,3 +19,9 @@ ruta_user:
     methods:
         - GET
         - DELETE
+
+ruta_result_list:
+    path:     /results
+    controller: 'funcionListadoResultados'
+    methods:
+        - GET
