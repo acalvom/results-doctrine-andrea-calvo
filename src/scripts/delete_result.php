@@ -45,5 +45,5 @@ $deletedResult = $entityManager
     ->getRepository(Result::class)
     ->findOneBy(['id' => $resultId]);
 if (null === $deletedResult) {
-    echo "Result has been deleted successfully" . PHP_EOL;
+    echo "Result $resultId has been deleted successfully" . PHP_EOL;
 }
