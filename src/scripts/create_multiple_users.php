@@ -22,8 +22,8 @@ if ($argc < 3) {
     $fich = basename(__FILE__);
     echo <<< MARCA_FIN
 
-    Usage: $fich <NewUser1> <NewUser2> [--json]
-    NewUser1 = username,email,password
+    Usage: $fich <NewUser> <NewUser> [--json]
+    NewUser = <Username>,<Email>,<Password>
     At least two users required
 
 MARCA_FIN;

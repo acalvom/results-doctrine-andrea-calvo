@@ -56,7 +56,7 @@ $user = $entityManager
     ->getRepository(User::class)
     ->findOneBy(['id' => $userId]);
 if (null === $user) {
-    echo "Usuario $userId no encontrado" . PHP_EOL;
+    echo "User $userId not found" . PHP_EOL;
     exit(0);
 }
 
@@ -68,7 +68,7 @@ try {
         echo json_encode($result, JSON_PRETTY_PRINT);
     } else {
         echo 'Created Result with Id ' . $result->getId()
-            . ' USER ' . $user->getUsername() . PHP_EOL;
+            . ' for USER ' . $user->getUsername() . PHP_EOL;
     }
 } catch (Throwable $exception) {
     echo $exception->getMessage();
