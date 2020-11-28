@@ -17,21 +17,24 @@ require __DIR__ . '/../../vendor/autoload.php';
 Utils::loadEnv(__DIR__ . '/../../');
 $entityManager = Utils::getEntityManager();
 
-if($argc < 4 || $argc > 5){
+if($argc < 3 || $argc > 7){
     $fich = basename(__FILE__);
+    //Todos los campos son obligatorios pero si se desea mantener alguno de los campos, añadir N
     echo <<< MARCA_FIN
 
-    Usage: $fich <UserId> <UserName> <Email> <Password> [--json]
-    Description: All fields are required in the specific order
+    Usage: $fich <UserId> <Password> <NewUserName> <NewEmail> <NewPassword> [--json]
+    Description: All fields are required in the specific order.
+    To keep a parameter, add N.
 
 MARCA_FIN;
     exit(0);
 }
 
 $userId = (int) $argv[1];
-$username = $argv[2];
-$email = $argv[3];
-$password = $argv[4];
+$password = $argv[2];
+$newUsername = $argv[3];
+$newEmail = $argv[4];
+$newPassword = $argv[5];
 
 /** @var User $user */
 $user = $entityManager
@@ -42,10 +45,22 @@ if (null === $user) {
     exit(0);
 }
 
+if(!$user->validatePassword($password)){
+    echo "Passwords do not match" . PHP_EOL;
+    //echo $password . '==' . $user->getPassword();
+    exit(0);
+}
+
+echo "Passwords match" . PHP_EOL;
 $updatedUser = $user;
-$updatedUser->setUsername($argv[2]);
-$updatedUser->setEmail($argv[3]);
-$updatedUser->setPassword($argv[4]);
+
+($newUsername == 'N') ? $updatedUser->setUsername($user->getUsername())
+                  : $updatedUser->setUsername($newUsername);
+($newEmail == 'N') ? $updatedUser->setEmail($user->getEmail())
+                  : $updatedUser->setEmail($newEmail);
+($newPassword == 'N') ? $updatedUser->setPassword($password)
+                  : $updatedUser->setPassword($newPassword);
+
 $entityManager->flush();
 
 if (in_array('--json', $argv)) {
