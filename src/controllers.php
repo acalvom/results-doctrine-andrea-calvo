@@ -44,7 +44,7 @@ function funcionHomePage()
                 <form action="$rutaUser" method="GET" enctype="multipart/form-data">
                     <label for="deleteUsername">Username:</label>
                     <input type="text" id="deleteUsername" name="deleteUsername" size="10"/>
-                    <input type="submit" value="Delete"/>
+                    <input type="submit" value="Delete User"/>
                 </form>
               </div>
               <div class="col" >
@@ -52,7 +52,12 @@ function funcionHomePage()
                 <form action="$rutaResult" method="GET" enctype="multipart/form-data">
                     <label for="id">Id:</label>
                     <input type="text" id="id" name="id" size="10"/>
-                    <input type="submit" value="Send Id"/>
+                    <input type="submit" value="Send"/>
+                </form>
+                <form action="$rutaResult" method="GET" enctype="multipart/form-data">
+                    <label for="deleteId">Id:</label>
+                    <input type="text" id="deleteId" name="deleteId" size="10"/>
+                    <input type="submit" value="Delete Result"/>
                 </form>
               </div>
             </div>
@@ -174,21 +179,39 @@ function funcionListadoResultados(): void
 
 function funcionResultado()
 {
-    $id = $_GET['id'];
+    if (filter_has_var(INPUT_GET, 'id')) {
+        $id = $_GET['id'];
+        $entityManager = Utils::getEntityManager();
 
-    $entityManager = Utils::getEntityManager();
+        /** @var Result $result */
+        $result = $entityManager
+            ->getRepository(Result::class)
+            ->findOneBy(['id' => $id]);
+        if (null === $result) {
+            echo "Result $id not found" . PHP_EOL;
+            exit(0);
+        }
+        echo json_encode($result, JSON_PRETTY_PRINT);
+        //echo "Result ". $result->__toString() . PHP_EOL;
 
-    /** @var Result $result */
-    $result = $entityManager
-        ->getRepository(Result::class)
-        ->findOneBy(['id' => $id]);
-    if (null === $result) {
-        echo "Result $id not found" . PHP_EOL;
-        exit(0);
+    } elseif (filter_has_var(INPUT_GET, 'deleteId')) {
+        $id = $_GET['deleteId'];
+        $entityManager = Utils::getEntityManager();
+        /** @var Result $result */
+        $result = $entityManager
+            ->getRepository(Result::class)
+            ->findOneBy(['id' => $id]);
+        if (null === $result) {
+            echo "Result ($id) not found" . PHP_EOL;
+            exit(0);
+        }
+        $entityManager->remove($result);
+        $entityManager->flush();
+        $deletedResult = $entityManager
+            ->getRepository(Result::class)
+            ->findOneBy(['id' => $id]);
+        if (null === $deletedResult) {
+            echo "Result $id has been deleted successfully" . PHP_EOL;
+        }
     }
-
-    echo json_encode($result, JSON_PRETTY_PRINT);
-
-    //echo "Result ". $result->__toString() . PHP_EOL;
-
 }
