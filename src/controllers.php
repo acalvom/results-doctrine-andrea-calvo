@@ -39,7 +39,12 @@ function funcionHomePage()
                 <form action="$rutaUser" method="GET" enctype="multipart/form-data">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" size="10"/>
-                    <input type="submit" value="Send Username"/>
+                    <input type="submit" value="Show"/>
+                </form>
+                <form action="$rutaUser" method="GET" enctype="multipart/form-data">
+                    <label for="deleteUsername">Username:</label>
+                    <input type="text" id="deleteUsername" name="deleteUsername" size="10"/>
+                    <input type="submit" value="Delete"/>
                 </form>
               </div>
               <div class="col" >
@@ -49,7 +54,6 @@ function funcionHomePage()
                     <input type="text" id="id" name="id" size="10"/>
                     <input type="submit" value="Send Id"/>
                 </form>
-                <a href="$rutaResult">Result</a></br>
               </div>
             </div>
           </div>
@@ -65,7 +69,6 @@ ____MARCA_FIN;
 function funcionListadoUsuarios(): void
 {
     $entityManager = Utils::getEntityManager();
-
     $userRepository = $entityManager->getRepository(User::class);
     $users = $userRepository->findAll();
 
@@ -77,7 +80,7 @@ function funcionListadoUsuarios(): void
         );
     /** @var User $user */
 
-   foreach ($users as $user) {
+    foreach ($users as $user) {
         echo sprintf(
             '- %2d: %15s %25s %15s',
             $user->getId(),
@@ -92,31 +95,61 @@ function funcionListadoUsuarios(): void
 
 function funcionUsuario()
 {
-    $name = $_GET['username'];
-    $entityManager = Utils::getEntityManager();
-    /** @var User $user */
-    $user = $entityManager
-        ->getRepository(User::class)
-        ->findOneBy(['username' => $name]);
-    if (null === $user) {
-        echo "User $name not found" . PHP_EOL;
-        exit(0);
+    if (filter_has_var(INPUT_GET, 'username')) {
+        $name = $_GET['username'];
+        $entityManager = Utils::getEntityManager();
+        /** @var User $user */
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['username' => $name]);
+        if (null === $user) {
+            echo "User $name not found" . PHP_EOL;
+            exit(0);
+        }
+
+        // echo json_encode($user, JSON_PRETTY_PRINT);
+
+        echo PHP_EOL . sprintf(
+                '  %2s: %20s %30s' . PHP_EOL,
+                'Id', 'Username:', 'Email:', 'Enabled:'
+            );
+        /** @var User $user */
+        echo sprintf(
+            '- %2d: %20s %30s',
+            $user->getId(),
+            $user->getUsername(),
+            $user->getEmail(),
+        ),
+        PHP_EOL;
+
+    } elseif (filter_has_var(INPUT_GET, 'deleteUsername')) {
+        $name = $_GET['deleteUsername'];
+        $entityManager = Utils::getEntityManager();
+
+        /** @var User $user */
+        $user = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['username' => $name]);
+        if (null === $user) {
+            echo "User $name not found" . PHP_EOL;
+            exit(0);
+        }
+        $userIdToDelete = $user->getId();
+        $usernameToDelete = $user->getUsername();
+        $userEmailToDelete = $user->getEmail();
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        $deletedUser = $entityManager
+            ->getRepository(User::class)
+            ->findOneBy(['username' => $name]);
+        if (null === $deletedUser) {
+            echo "User $usernameToDelete (id: $userIdToDelete), with email: $userEmailToDelete has been deleted successfully" . PHP_EOL;
+        }
     }
 
-    echo json_encode($user, JSON_PRETTY_PRINT);
 
-    echo PHP_EOL . sprintf(
-            '  %2s: %20s %30s' . PHP_EOL,
-            'Id', 'Username:', 'Email:', 'Enabled:'
-        );
-    /** @var User $user */
-    echo sprintf(
-        '- %2d: %20s %30s',
-        $user->getId(),
-        $user->getUsername(),
-        $user->getEmail(),
-    ),
-    PHP_EOL;
 }
 
 function funcionListadoResultados(): void
@@ -132,7 +165,7 @@ function funcionListadoResultados(): void
     $items = 0;
     /* @var Result $result */
     foreach ($results as $result) {
-        echo  $result . PHP_EOL;
+        echo $result . PHP_EOL;
         $items++;
     }
     echo PHP_EOL . "Total: $items results.";
