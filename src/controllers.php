@@ -35,30 +35,38 @@ function funcionHomePage()
           <div class="container">
             <div class="row">
               <div class="col" >
-                <a href="$rutaUserList">User List</a></br>
+                <h2>USERS INFORMATION</h2></br>
+                <form action="$rutaUserList" method="GET" enctype="multipart/form-data">
+                    <label for="userList">User List &nbsp;</label>
+                    <input type="submit" value="List Users"/>
+                </form></br>
                 <form action="$rutaUser" method="GET" enctype="multipart/form-data">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" size="10"/>
                     <input type="submit" value="Show"/>
-                </form>
+                </form></br>
                 <form action="$rutaUser" method="GET" enctype="multipart/form-data">
                     <label for="deleteUsername">Username:</label>
                     <input type="text" id="deleteUsername" name="deleteUsername" size="10"/>
                     <input type="submit" value="Delete User"/>
-                </form>
+                </form></br>
               </div>
               <div class="col" >
-                <a href="$rutaResultList">Result List</a></br>
+                <h2>RESULTS INFORMATION</h2></br>
+                <form action="$rutaResultList" method="GET" enctype="multipart/form-data">
+                    <label for="resultList">Result List &nbsp;</label>
+                    <input type="submit" value="List Results"/>
+                </form></br>
                 <form action="$rutaResult" method="GET" enctype="multipart/form-data">
                     <label for="id">Id:</label>
                     <input type="text" id="id" name="id" size="10"/>
                     <input type="submit" value="Send"/>
-                </form>
+                </form></br>
                 <form action="$rutaResult" method="GET" enctype="multipart/form-data">
                     <label for="deleteId">Id:</label>
                     <input type="text" id="deleteId" name="deleteId" size="10"/>
                     <input type="submit" value="Delete Result"/>
-                </form>
+                </form></br>
               </div>
             </div>
           </div>
@@ -100,24 +108,26 @@ function funcionListadoUsuarios(): void
 
 function funcionUsuario()
 {
+    (filter_has_var(INPUT_GET, 'username')) ? $name = $_GET['username']
+        : $name = $_GET['deleteUsername'];
+
+    $entityManager = Utils::getEntityManager();
+    /** @var User $user */
+    $user = $entityManager
+        ->getRepository(User::class)
+        ->findOneBy(['username' => $name]);
+    if (null === $user) {
+        echo "User $name not found" . PHP_EOL;
+        exit(0);
+    }
+
     if (filter_has_var(INPUT_GET, 'username')) {
-        $name = $_GET['username'];
-        $entityManager = Utils::getEntityManager();
-        /** @var User $user */
-        $user = $entityManager
-            ->getRepository(User::class)
-            ->findOneBy(['username' => $name]);
-        if (null === $user) {
-            echo "User $name not found" . PHP_EOL;
-            exit(0);
-        }
-
         // echo json_encode($user, JSON_PRETTY_PRINT);
-
         echo PHP_EOL . sprintf(
                 '  %2s: %20s %30s' . PHP_EOL,
                 'Id', 'Username:', 'Email:', 'Enabled:'
             );
+
         /** @var User $user */
         echo sprintf(
             '- %2d: %20s %30s',
@@ -128,17 +138,6 @@ function funcionUsuario()
         PHP_EOL;
 
     } elseif (filter_has_var(INPUT_GET, 'deleteUsername')) {
-        $name = $_GET['deleteUsername'];
-        $entityManager = Utils::getEntityManager();
-
-        /** @var User $user */
-        $user = $entityManager
-            ->getRepository(User::class)
-            ->findOneBy(['username' => $name]);
-        if (null === $user) {
-            echo "User $name not found" . PHP_EOL;
-            exit(0);
-        }
         $userIdToDelete = $user->getId();
         $usernameToDelete = $user->getUsername();
         $userEmailToDelete = $user->getEmail();
