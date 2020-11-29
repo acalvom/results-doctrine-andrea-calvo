@@ -179,32 +179,25 @@ function funcionListadoResultados(): void
 
 function funcionResultado()
 {
-    if (filter_has_var(INPUT_GET, 'id')) {
-        $id = $_GET['id'];
-        $entityManager = Utils::getEntityManager();
+    (filter_has_var(INPUT_GET, 'id')) ? $id = $_GET['id']
+        : $id = $_GET['deleteId'];
 
-        /** @var Result $result */
-        $result = $entityManager
-            ->getRepository(Result::class)
-            ->findOneBy(['id' => $id]);
-        if (null === $result) {
-            echo "Result $id not found" . PHP_EOL;
-            exit(0);
-        }
+    $entityManager = Utils::getEntityManager();
+
+    /** @var Result $result */
+    $result = $entityManager
+        ->getRepository(Result::class)
+        ->findOneBy(['id' => $id]);
+    if (null === $result) {
+        echo "Result $id not found" . PHP_EOL;
+        exit(0);
+    }
+
+    if ((filter_has_var(INPUT_GET, 'id'))) {
         echo json_encode($result, JSON_PRETTY_PRINT);
         //echo "Result ". $result->__toString() . PHP_EOL;
 
-    } elseif (filter_has_var(INPUT_GET, 'deleteId')) {
-        $id = $_GET['deleteId'];
-        $entityManager = Utils::getEntityManager();
-        /** @var Result $result */
-        $result = $entityManager
-            ->getRepository(Result::class)
-            ->findOneBy(['id' => $id]);
-        if (null === $result) {
-            echo "Result ($id) not found" . PHP_EOL;
-            exit(0);
-        }
+    } elseif ((filter_has_var(INPUT_GET, 'deleteId'))) {
         $entityManager->remove($result);
         $entityManager->flush();
         $deletedResult = $entityManager
