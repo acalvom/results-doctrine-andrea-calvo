@@ -71,10 +71,14 @@ class ResultTest extends \PHPUnit\Framework\TestCase
      */
     public function testConstructor(): void
     {
-        self::assertSame(0, $this->result->getId());
-        self::assertSame(2018, $this->result->getResult());
-        self::assertSame($this->user, $this->result->getUser());
-        self::assertSame($this->time, $this->result->getTime());
+        $testUser = new User('testUsername');
+        $date = new \DateTime('2020-12-01');
+        $testResult = new Result(2020, $testUser, $date);
+
+        self::assertSame(0, $testResult->getId());
+        self::assertSame(2020, $testResult->getResult());
+        self::assertSame($testUser, $testResult->getUser());
+        self::assertSame($date, $testResult->getTime());
     }
 
     /**

@@ -42,17 +42,13 @@ class UserTest extends TestCase
      */
     public function testConstructor(): void
     {
-        /*$newUser = $this->user->__construct('username', 'email', 'password');
-        echo $newUser;
-        self::assertSame(
-            'username',
-            $this->user->__construct('username', 'email', 'password')
-        );*/
+        $testUser = new User('testUsername', 'testEmail@xyz.com', 'testPassword', true, true);
 
-        self::markTestIncomplete(
-            'This test has not been implemented yet.'
-        );
-
+        self::assertSame(0, $testUser->getId(), 'Id is not created correctly');
+        self::assertSame('testUsername', $testUser->getUsername(), 'Username is not created correctly');
+        self::assertSame('testEmail@xyz.com', $testUser->getEmail(), 'Email is not created correctly');
+        self::assertTrue($testUser->isEnabled(), 'Enable parameter is not created correctly');
+        self::assertTrue($testUser->isAdmin(), 'Admin parameter is not created correctly');
     }
 
     /**
@@ -72,7 +68,7 @@ class UserTest extends TestCase
      */
     public function testGetSetUsername(): void
     {
-        $this->user ->setUsername('testUsername');
+        $this->user->setUsername('testUsername');
         self::assertSame(
             'testUsername',
             $this->user->getUsername()
@@ -85,7 +81,7 @@ class UserTest extends TestCase
      */
     public function testGetSetEmail(): void
     {
-        $this->user ->setEmail('testEmail@xyz.com');
+        $this->user->setEmail('testEmail@xyz.com');
         self::assertSame(
             'testEmail@xyz.com',
             $this->user->getEmail()
@@ -98,7 +94,7 @@ class UserTest extends TestCase
      */
     public function testIsSetEnabled(): void
     {
-        $this->user ->setEnabled(true);
+        $this->user->setEnabled(true);
         self::assertTrue(
             $this->user->isEnabled()
         );
@@ -110,7 +106,7 @@ class UserTest extends TestCase
      */
     public function testIsSetAdmin(): void
     {
-        $this->user ->setIsAdmin(true);
+        $this->user->setIsAdmin(true);
         self::assertTrue(
             $this->user->isAdmin()
         );
@@ -123,7 +119,7 @@ class UserTest extends TestCase
     public function testSetValidatePassword(): void
     {
         $testPassword = 'testPassword';
-        $this->user ->setPassword($testPassword);
+        $this->user->setPassword($testPassword);
         self::assertTrue(
             $this->user->validatePassword($testPassword)
         );
@@ -134,10 +130,10 @@ class UserTest extends TestCase
      */
     public function testToString(): void
     {
-        $this->user -> setUsername('testUsername');
-        $this->user -> setEmail('testEmail@xyz.com');
-        $this->user -> setEnabled(true);
-        $this->user -> setIsAdmin(true);
+        $this->user->setUsername('testUsername');
+        $this->user->setEmail('testEmail@xyz.com');
+        $this->user->setEnabled(true);
+        $this->user->setIsAdmin(true);
 
         $testToString = '  0 -         testUsername -              testEmail@xyz.com - 1 - 1';
         self::assertSame(
@@ -153,10 +149,10 @@ class UserTest extends TestCase
     {
         $jsonTest = $this->user->jsonSerialize();
 
-        self::assertArrayHasKey('id',$jsonTest, 'JsonSerialize does not have id key');
-        self::assertArrayHasKey('username', $jsonTest,'JsonSerialize does not have username key');
-        self::assertArrayHasKey('email', $jsonTest,'JsonSerialize does not have email key');
-        self::assertArrayHasKey('enabled', $jsonTest,'JsonSerialize does not have enabled key');
-        self::assertArrayHasKey('admin', $jsonTest,'JsonSerialize does not have admin key');
+        self::assertArrayHasKey('id', $jsonTest, 'JsonSerialize does not have id key');
+        self::assertArrayHasKey('username', $jsonTest, 'JsonSerialize does not have username key');
+        self::assertArrayHasKey('email', $jsonTest, 'JsonSerialize does not have email key');
+        self::assertArrayHasKey('enabled', $jsonTest, 'JsonSerialize does not have enabled key');
+        self::assertArrayHasKey('admin', $jsonTest, 'JsonSerialize does not have admin key');
     }
 }
