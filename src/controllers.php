@@ -19,9 +19,12 @@ function funcionHomePage()
     $rutaUserList = $routes->get('ruta_user_list')->getPath();
     $rutaUser = $routes->get('ruta_user')->getPath();
     $rutaCreateUser = $routes->get('ruta_create_user')->getPath();
+    $rutaUpdateUser = $routes->get('ruta_update_user')->getPath();
+
     $rutaResultList = $routes->get('ruta_result_list')->getPath();
     $rutaResult = $routes->get('ruta_result')->getPath();
     $rutaCreateResult = $routes->get('ruta_create_result')->getPath();
+    $rutaUpdateResult = $routes->get('ruta_update_result')->getPath();
 
     echo <<< ____MARCA_FIN
    <!DOCTYPE html>
@@ -42,19 +45,22 @@ function funcionHomePage()
                 <form action="$rutaUserList" method="GET" enctype="multipart/form-data">
                     <label for="userList">User List &nbsp;</label>
                     <input type="submit" value="List Users"/>
-                </form></br>
+                </form>
+                <h4>_____________________________________________</h4>
                 <h4>Show user</h4>
                 <form action="$rutaUser" method="GET" enctype="multipart/form-data">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="username" size="10"/>
                     <input type="submit" value="Show"/>
-                </form></br>
+                </form>
+                <h4>_____________________________________________</h4>
                 <h4>Delete user</h4>
                 <form action="$rutaUser" method="GET" enctype="multipart/form-data">
                     <label for="deleteUsername">Username:</label>
                     <input type="text" id="deleteUsername" name="deleteUsername" size="10"/>
                     <input type="submit" value="Delete User"/>
-                </form></br>
+                </form>
+                <h4>_____________________________________________</h4>
                 <h4>Create new user</h4>
                 <form action="$rutaCreateUser" method="POST" enctype="multipart/form-data">
                     <label for="newUsername">Username: &nbsp;</label>
@@ -68,7 +74,22 @@ function funcionHomePage()
                     <label for="isAdmin">Admin user?</label>
                     <input type="checkbox" id="isAdmin" name="isAdmin" value="1"/></br>
                     <input type="submit" value="Create User"/>
-                </form></br>    
+                </form>
+                <h4>_____________________________________________</h4>  
+                <h4>Update user</h4>
+                <form action="$rutaUpdateUser" method="POST" enctype="multipart/form-data">
+                    <label for="currentUsername">Username: &nbsp;&emsp;&emsp;</label>
+                    <input type="text" id="currentUsername" name="currentUsername" size="10"/></br>
+                    <label for="currentPassword">Password:&emsp;&emsp;&emsp;</label>
+                    <input type="text" id="currentPassword" name="currentPassword" size="10"/></br>
+                    <label for="updatedUsername">New username: &nbsp;</label>
+                    <input type="text" id="updatedUsername" name="updatedUsername" size="10"/></br>
+                    <label for="newEmail">New email:&nbsp;&nbsp;&emsp;&emsp;</label>
+                    <input type="text" id="updatedEmail" name="updatedEmail" size="10"/></br>
+                    <label for="newPassword">New password:&nbsp;&nbsp;&nbsp;</label>
+                    <input type="password" id="updatedPassword" name="updatedPassword" size="10"/></br>
+                    <input type="submit" value="Update User"/>
+                </form></br>   
               </div>
               <div class="col" >
                 <h2><strong>RESULTS INFORMATION</strong></h2></br>
@@ -76,19 +97,22 @@ function funcionHomePage()
                 <form action="$rutaResultList" method="GET" enctype="multipart/form-data">
                     <label for="resultList">Result List &nbsp;</label>
                     <input type="submit" value="List Results"/>
-                </form></br>
+                </form>
+                <h4>_____________________________________________</h4>
                 <h4>Show result</h4>
                 <form action="$rutaResult" method="GET" enctype="multipart/form-data">
                     <label for="id">Id:</label>
                     <input type="text" id="id" name="id" size="10"/>
                     <input type="submit" value="Send"/>
-                </form></br>
+                </form>
+                <h4>_____________________________________________</h4>
                 <h4>Delete result</h4>
                 <form action="$rutaResult" method="GET" enctype="multipart/form-data">
                     <label for="deleteId">Id:</label>
                     <input type="text" id="deleteId" name="deleteId" size="10"/>
                     <input type="submit" value="Delete Result"/>
-                </form></br>
+                </form>
+                <h4>_____________________________________________</h4>
                 <h4>Create new result</h4>
                 <form action="$rutaCreateResult" method="POST" enctype="multipart/form-data">
                     <label for="newUsername">Username: &nbsp;</label>
@@ -96,16 +120,21 @@ function funcionHomePage()
                     <label for="newResult">Result:&nbsp;&emsp;&emsp;</label>
                     <input type="text" id="newResult" name="newResult" size="10"/></br>
                     <input type="submit" value="Create Result"/>
-                </form></br>  
+                </form></br></br></br></br>
+                <h4>_____________________________________________</h4> 
+                <h4>Update result</h4>
+                <form action="$rutaUpdateResult" method="POST" enctype="multipart/form-data">
+                    <label for="updatedId">Result Id: &emsp;</label>
+                    <input type="text" id="updatedId" name="updatedId" size="10"/></br>
+                    <label for="updatedResult">New result:&nbsp;</label>
+                    <input type="text" id="updatedResult" name="updatedResult" size="10"/></br>
+                    <input type="submit" value="Update Result"/>
+                </form></br>
               </div>
             </div>
           </div>
         </body>
     </html>
-   
-    
-    
-    
 ____MARCA_FIN;
 }
 
@@ -116,24 +145,6 @@ function funcionListadoUsuarios(): void
     $users = $userRepository->findAll();
 
     echo json_encode($users, JSON_PRETTY_PRINT);
-//    $items = 0;
-//    echo PHP_EOL . sprintf(
-//            '- %2s: %15s %25s %15s' . PHP_EOL,
-//            'Id', 'Username:', 'Email:', 'Enabled:'
-//        );
-//    /** @var User $user */
-//
-//    foreach ($users as $user) {
-//        echo sprintf(
-//            '- %2d: %15s %25s %15s',
-//            $user->getId(),
-//            $user->getUsername(),
-//            $user->getEmail(),
-//            ($user->isEnabled()) ? 'true' : 'false'
-//        ),
-//        PHP_EOL;
-//        $items++;
-//    }
 }
 
 function funcionUsuario() :void
@@ -142,6 +153,7 @@ function funcionUsuario() :void
         : $name = $_GET['deleteUsername'];
 
     $entityManager = Utils::getEntityManager();
+
     /** @var User $user */
     $user = $entityManager
         ->getRepository(User::class)
@@ -153,19 +165,6 @@ function funcionUsuario() :void
 
     if (filter_has_var(INPUT_GET, 'username')) {
          echo json_encode($user, JSON_PRETTY_PRINT);
-//        echo PHP_EOL . sprintf(
-//                '  %2s: %20s %30s' . PHP_EOL,
-//                'Id', 'Username:', 'Email:', 'Enabled:'
-//            );
-//
-//        /** @var User $user */
-//        echo sprintf(
-//            '- %2d: %20s %30s',
-//            $user->getId(),
-//            $user->getUsername(),
-//            $user->getEmail(),
-//        ),
-//        PHP_EOL;
 
     } elseif (filter_has_var(INPUT_GET, 'deleteUsername')) {
         $userIdToDelete = $user->getId();
@@ -195,23 +194,61 @@ function funcionCreateUser()
     $admin = isset($_POST['isAdmin']);
 
     try{
-    $newUser = new User();
-    $newUser->setUsername($newUsername);
-    $newUser->setEmail($newEmail);
-    $newUser->setPassword($newPassword);
-    $newUser->setEnabled($enabled);
-    $newUser->setIsAdmin($admin);
+        $newUser = new User();
+        $newUser->setUsername($newUsername);
+        $newUser->setEmail($newEmail);
+        $newUser->setPassword($newPassword);
+        $newUser->setEnabled($enabled);
+        $newUser->setIsAdmin($admin);
 
-    $entityManager->persist($newUser);
-    $entityManager->flush();
+        $entityManager->persist($newUser);
+        $entityManager->flush();
 
-    echo json_encode($newUser, JSON_PRETTY_PRINT);
-    //echo "Created New User ". $newUser->__toString() . PHP_EOL;
+        echo json_encode($newUser, JSON_PRETTY_PRINT);
+
     } catch (Throwable $exception) {
         echo "USER $newUsername ALREADY EXISTS" . PHP_EOL . PHP_EOL;
         echo $exception->getMessage() . PHP_EOL;
     }
 
+}
+
+function funcionUpdateUser() {
+    $entityManager   = Utils::getEntityManager();
+
+    $currentUsername = filter_input(INPUT_POST,'currentUsername');
+    $currentPassword = filter_input(INPUT_POST,'currentPassword');
+
+    $updatedUsername = filter_input(INPUT_POST,'updatedUsername');
+    $updatedEmail    = filter_input(INPUT_POST,'updatedEmail');
+    $updatedPassword = filter_input(INPUT_POST,'updatedPassword');
+
+    /** @var User $user */
+    $user = $entityManager
+        ->getRepository(User::class)
+        ->findOneBy(['username' => $currentUsername]);
+    if (null === $user) {
+        echo "User $currentUsername not found" . PHP_EOL;
+        exit(0);
+    }
+
+    if(!$user->validatePassword($currentPassword)){
+        echo "Passwords do not match" . PHP_EOL;
+        exit(0);
+    }
+
+    $updatedUser = $user;
+
+    ($updatedUsername == '') ? $updatedUser->setUsername($user->getUsername())
+        : $updatedUser->setUsername($updatedUsername);
+    ($updatedEmail == '') ? $updatedUser->setEmail($user->getEmail())
+        : $updatedUser->setEmail($updatedEmail);
+    ($updatedPassword == '') ? $updatedUser->setPassword($currentPassword)
+        : $updatedUser->setPassword($updatedPassword);
+
+    $entityManager->flush();
+
+    echo json_encode($updatedUser, JSON_PRETTY_PRINT);
 }
 
 function funcionListadoResultados(): void
@@ -221,16 +258,6 @@ function funcionListadoResultados(): void
     $results = $resultsRepository->findAll();
 
     echo json_encode($results, JSON_PRETTY_PRINT);
-//    echo PHP_EOL
-//        . sprintf('%3s - %3s - %22s - %s', 'Id', 'res', 'username', 'time')
-//        . PHP_EOL;
-//    $items = 0;
-//    /* @var Result $result */
-//    foreach ($results as $result) {
-//        echo $result . PHP_EOL;
-//        $items++;
-//    }
-//    echo PHP_EOL . "Total: $items results.";
 }
 
 
@@ -252,7 +279,6 @@ function funcionResultado()
 
     if ((filter_has_var(INPUT_GET, 'id'))) {
         echo json_encode($result, JSON_PRETTY_PRINT);
-        //echo "Result ". $result->__toString() . PHP_EOL;
 
     } elseif ((filter_has_var(INPUT_GET, 'deleteId'))) {
         $entityManager->remove($result);
@@ -286,6 +312,26 @@ function funcionCreateResult()
     $entityManager->flush();
 
     echo json_encode($result, JSON_PRETTY_PRINT);
-//    echo 'Created Result with Id ' . $result->getId()
-//        . ' for USER ' . $user->getUsername() . PHP_EOL;
+}
+
+function funcionUpdateResult(){
+    $entityManager = Utils::getEntityManager();
+    $updatedId = filter_input(INPUT_POST, 'updatedId');
+    $updatedResult = filter_input(INPUT_POST, 'updatedResult');
+
+    /** @var Result $result */
+    $result = $entityManager
+        ->getRepository(Result::class)
+        ->findOneBy(['id' => $updatedId]);
+    if (null === $result) {
+        echo "Result ($updatedId) not found" . PHP_EOL;
+        exit(0);
+    }
+
+    $updatedResultId = $result;
+    $result->setResult($updatedResult);
+    $result->setTime(new DateTime('now'));
+    $entityManager->flush();
+
+    echo json_encode($updatedResultId, JSON_PRETTY_PRINT);
 }

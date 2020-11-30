@@ -11,18 +11,16 @@ ruta_user_list:
     methods:
       - GET
 
-ruta_update_user:
-    path:     /users/edit/{name}
-    controller: 'funcionUpdateUser'
-    defaults:
-        name: _default_
-    methods: [POST]
-
 ruta_create_user:
     path:     /users/newUser
     controller: 'funcionCreateUser'
     methods:
-        #- GET
+        - POST
+
+ruta_update_user:
+    path:     /users/updateUser
+    controller: 'funcionUpdateUser'
+    methods:
         - POST
 
 ruta_user:
@@ -44,7 +42,12 @@ ruta_create_result:
     path: /results/newResult
     controller: 'funcionCreateResult'
     methods:
-        #- GET
+        - POST
+
+ruta_update_result:
+    path: /results/updateResult
+    controller: 'funcionUpdateResult'
+    methods:
         - POST
 
 ruta_result:
